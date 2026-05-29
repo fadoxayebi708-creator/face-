@@ -9,7 +9,7 @@ data contract.
 | Stage | Module | Status |
 |-------|--------|--------|
 | Face detection / 468-point landmarks | `face_pipeline.face_detector` | Implemented |
-| Head pose (solvePnP) | _planned_ | Pending |
+| Head pose (solvePnP) | `face_pipeline.pose_estimator` | Implemented |
 | Gaze tracking (iris) | _planned_ | Pending |
 | Expression / Action Units | _planned_ | Pending |
 
@@ -37,11 +37,26 @@ with FaceDetector(max_num_faces=1) as detector:
         pose_pts = face.get_pose_landmarks_2d()   # (6, 2) for solvePnP
 ```
 
+Add head pose on top of detection:
+
+```python
+from face_pipeline import FaceDetector, PoseEstimator
+
+detector = FaceDetector(max_num_faces=1)
+estimator = PoseEstimator(temporal_guess=True)
+
+face = detector.detect_primary(frame)
+if face is not None:
+    pose = estimator.estimate(face)           # also sets face.head_pose
+    if pose is not None and pose.is_reliable():
+        print(pose.yaw, pose.pitch, pose.roll)
+```
+
 ## Webcam smoke test
 
 ```bash
-python -m face_pipeline.face_detector
+python -m face_pipeline.face_detector     # landmarks + bbox + FPS
+python -m face_pipeline.pose_estimator    # + projected pose axes & angles
 ```
 
-Draws bounding boxes, landmark counts, in-frame confidence, and live FPS.
 Press `q` to quit.
