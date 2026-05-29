@@ -4,6 +4,7 @@ Modular real-time facial-analysis pipeline.
 
 Currently implemented stages:
     * Face detection / landmarks (:mod:`face_pipeline.face_detector`)
+    * Head pose / solvePnP (:mod:`face_pipeline.pose_estimator`)
 """
 
 from __future__ import annotations
@@ -14,12 +15,15 @@ from face_pipeline.face_detector import (
     FaceMeshIndices,
     FaceState,
 )
+from face_pipeline.pose_estimator import HeadPose, PoseEstimator
 
 __all__ = [
     "BoundingBox",
     "FaceDetector",
     "FaceMeshIndices",
     "FaceState",
+    "HeadPose",
+    "PoseEstimator",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
